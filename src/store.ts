@@ -34,17 +34,23 @@ type StoreState = {
   guesses: string[];
   hints: { correct: number; misplaced: number }[];
   isSolved: boolean;
+  codeLength: number;
+  setCodeLength: (len: number) => void;
   addGuess: (guess: string) => void;
-  newGame: () => void;
+  newGame: (len?: number) => void;
 };
 
 export const useStore = create<StoreState>()(
   persist(
     (set, get) => ({
-      answer: getRandomGuess(),
+      answer: getRandomGuess(4, 8),
       guesses: [],
       hints: [],
       isSolved: false,
+      codeLength: 4,
+      setCodeLength: (len: number) => {
+        set({ codeLength: len });
+      },
       addGuess: (guess: string) => {
         const { answer, guesses, hints } = get();
         const newHints = computeHints(guess, answer);
@@ -55,12 +61,14 @@ export const useStore = create<StoreState>()(
           isSolved: solved,
         });
       },
-      newGame: () => {
+      newGame: (len?: number) => {
+        const codeLength = len ?? get().codeLength;
         set({
-          answer: getRandomGuess(),
+          answer: getRandomGuess(codeLength, 8),
           guesses: [],
           hints: [],
           isSolved: false,
+          codeLength,
         });
       },
     }),

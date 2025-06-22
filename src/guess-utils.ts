@@ -1,9 +1,9 @@
 export const CODE_LENGTH = 6;
 
-export function getRandomGuess(): string {
+export function getRandomGuess(codeLength: number, colorCount: number): string {
   let randomNumber = "";
-  for (let i = 0; i < CODE_LENGTH; i++) {
-    randomNumber += Math.floor(Math.random() * 6); // 6 colors: 0-5
+  for (let i = 0; i < codeLength; i++) {
+    randomNumber += Math.floor(Math.random() * colorCount);
   }
   return randomNumber;
 }
